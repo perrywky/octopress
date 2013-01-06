@@ -16,7 +16,7 @@ description: 关于编程、学习以及web开发相关技术的博客
 date_format: "%F"
 
 # RSS / Email (optional) subscription links (change if using something like Feedburner)
-subscribe_rss: /atom.xml
+subscribe_rss: http://feeds.feedburner.com/pengqi/UYPL
 subscribe_email:
 # RSS feeds can list your email address if you like
 email:
