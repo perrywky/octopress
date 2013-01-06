@@ -25,6 +25,7 @@ title: Ruby与PHP的比较
 ["a", "b", "c"].length
 ```
 ``` php php
+<?php
 explode(" ", "a b c");
 strlen('abc');
 count(array('a', 'b', 'c'));
@@ -39,6 +40,7 @@ last = array.last    #5
 subarr = array[1,3]    #[2,3,4]
 ```
 ``` php php
+<?php
 $array = array(1, 2, 3, 4, 5);
 $last = $array[count($array)-1]
 $subarr = array_slice($array, 1, 3);
@@ -49,6 +51,7 @@ a, b = 1, 2    #a=1, b=2
 a, b = b, a    #a=2, b=1
 ```
 ``` php php
+<?php
 $a = 1;
 $b = 2;
 $tmp = $a;
@@ -62,6 +65,7 @@ array = [1, 2, 3]
 map = array.map { |item| item + 10 }    #[11, 12, 13]
 ```
 ``` php php
+<?php
 $array = array(1, 2, 3);
 function plusTen($v){
     return $v + 10;
@@ -75,6 +79,7 @@ File.open('example.txt') do |file|
 end
 ```
 ``` php php
+<?php
 $handle = fopen("example.txt", "r");
 $capital_lines = array();
 while (($line = fgets($handle)) !== false) {
