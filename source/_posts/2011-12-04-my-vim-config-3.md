@@ -8,6 +8,9 @@ title: 我的Vim配置（三）
 继续之前的Vim配置系列，这次我将介绍两个插件和PHP相关的配置
 ###使用taglist来实现IDE中的outline功能
 以前使用IDE时，有个很贴心的功能我很喜欢，就是把当前文件的类函数全部列出来，这样当你的函数很多时，能很方便的找到自己想要的，而不需要在代码里翻来翻去。[taglist](http://www.vim.org/scripts/script.php?script_id=273)就是这样的一个插件，它使用ctags动态生成当前文件的tag并在一个新窗口里显示出来，你只需点击这个窗口里的函数名，就能快速定位到某个函数的开始位置，非常好用。安装也很简单，跟以前一样将这个插件放到bundle目录下，就能使用了。因为我主要使用MacVim，所以我添加了以下配置信息到.gimvrc里，使用起来更加方便。
+
+<!--more-->
+
 ``` vim
 autocmd VimEnter * TlistToggle "启动时强制打开taglist窗口
 let Tlist_Show_One_File=1 "一次只显示一个文件的tag，默认会显示所有打开过的

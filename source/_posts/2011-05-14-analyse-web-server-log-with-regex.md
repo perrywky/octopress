@@ -15,6 +15,9 @@ $remote_addr - $remote_user [$time_local]  "$request"
 $status $body_bytes_sent "$http_referer" "$http_user_agent"
 ```
 而且全部是PHP动态请求，所以我决定从time_local下手，找到并发访问量最高的时间段，这很容易办到：
+
+<!--more-->
+
 ```
 grep -oP '12\/May\/2011(:\d{2}){3}' access.log | uniq -c | sort -n > time.sort
 ```

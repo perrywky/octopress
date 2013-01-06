@@ -10,6 +10,8 @@ title: cakephp、yii、kohana性能比较
 周末闲来无事，测了下三个php框架的性能，图表如下
 {% img /images//uploads/php-framework-bench.png 600 371 php-framework-bench %}
 
+<!--more-->
+
 | framework | reqs | reqs with apc |
 | :--------- | :---- | :------------- |
 | cake 1.3.11 | 12569.8 | 32786

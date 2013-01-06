@@ -13,6 +13,9 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ http://www.example2.com/$1 [R,L]
 ```
+
+<!--more-->
+
 这里首先用^(.*)$这一正则表达式来匹配所有的url，然后再判断这个url指向的文件是否存在。
 ###DocumentRoot设定后‘/’永远存在
 继续上面的例子，假设我的一个域名没有首页，我希望把针对这个域名的访问也转发到另外一个地址，比如www.example.com跳转到www.example2.com，那么上面的规则就不够了，因为‘/’目录是存在的，无法通过条件

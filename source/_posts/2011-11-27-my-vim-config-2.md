@@ -9,6 +9,9 @@ title: 我的Vim配置（二）
 ###使用pathogen来管理你的插件
 安装vim插件是件很麻烦的事情，首先要把\*.vim文件放到plugin目录里，其次要把文档放到doc目录里，而很多插件还自带了一些文件和目录，久而久之，.vim文件夹就显得臃肿不堪了，***你都不知道哪个文件是属于哪个插件的！***[pathogen](https://github.com/tpope/vim-pathogen)就是一个专门对付这种问题的插件。装了此插件后，你其他所有的插件都可以放到.vim/bundle目录下，每个插件对应的是一个单独的目录，这样插件自带的文件就不会混在一起，管理起来就轻松多了！
 pathogen的安装我就不多说了，链接里介绍的很清楚。
+
+<!--more-->
+
 ###NERDTree
 [NERDTree](http://www.vim.org/scripts/script.php?script_id=1658)是我装过的第一个插件，它可以在vim里显示目录和文件的结构，类似IDE里的Navigator功能，方便你找到文件，非常好用，安装也很简单，参照链接里的指示就行了。不过我建议你安装[Github](https://github.com/scrooloose/nerdtree)里的最新版本，命令如下
 ``` bash
