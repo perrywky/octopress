@@ -1,0 +1,16 @@
+---
+layout: default
+---
+
+<div class='blog-index'>
+  <p style="text-align:center;margin:150px auto">
+  404 - 你已穿过了我思维的边界
+  </p>
+</div>
+<aside class="sidebar">
+  {% if site.blog_index_asides.size %}
+    {% include_array blog_index_asides %}
+  {% else %}
+    {% include_array default_asides %}
+  {% endif %}
+</aside>
