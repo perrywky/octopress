@@ -41,3 +41,10 @@ categories:
 
 - <http://dealnews.com/developers/cacti/memcached.html>
 - 需要先装一个python的模块，文档里有说明
+
+### Redis
+
+- <https://github.com/nazgul5/cacti-redis>
+- 需要先装一个python的模块，`easy_install redis`
+- 将redis-stats.py放到cacti_home/scripts目录下
+- 使用以下命令测试 `python redis-stats.py -a 'redis password' redis-host`
