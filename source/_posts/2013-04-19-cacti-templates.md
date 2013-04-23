@@ -44,7 +44,8 @@ categories:
 
 ### Redis
 
-- <https://github.com/nazgul5/cacti-redis>
+- <https://github.com/perrywky/cacti-redis>
 - 需要先装一个python的模块，`easy_install redis`
 - 将redis-stats.py放到cacti_home/scripts目录下
 - 使用以下命令测试 `python redis-stats.py -a 'redis password' redis-host`
+- 当你添加graph时，哪怕默认db0，也要填进去，否则不会有数据
