@@ -1,11 +1,9 @@
 --- 
-categories: 
-  - web
-  - regex
-  - log
-comments: true
 layout: post
 title: 使用grep和正则来分析Web服务器日志
+categories: 
+  - SA
+comments: true
 ---
 前两天因为第三方游戏服务器掉线，导致大量用户同时登录我的服务器，将服务器负载瞬间提高到200+，如此恐怖的数字让我不得不考虑增加服务器来抵抗问题重现，然而我的服务器平时负载都很低，0.1都不到，增加服务器来应付这样短暂的风暴未免太过于浪费，于是我决定从日志下手，找到我的网站的瓶颈，希望能通过改善程序来解决这个问题。
 ###第一步，定位时间
@@ -15,8 +13,6 @@ $remote_addr - $remote_user [$time_local]  "$request"
 $status $body_bytes_sent "$http_referer" "$http_user_agent"
 ```
 而且全部是PHP动态请求，所以我决定从time_local下手，找到并发访问量最高的时间段，这很容易办到：
-
-<!--more-->
 
 ```
 grep -oP '12\/May\/2011(:\d{2}){3}' access.log | uniq -c | sort -n > time.sort

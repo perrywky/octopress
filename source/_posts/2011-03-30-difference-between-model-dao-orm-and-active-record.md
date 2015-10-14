@@ -1,9 +1,9 @@
 --- 
+layout: post
+title: "浅谈model, orm, dao和active record的区别"
 categories: 
   - web
 comments: true
-layout: post
-title: "浅谈model, orm, dao和active record的区别"
 ---
 在做web开发中，经常会碰到这样几个概念：
 
@@ -13,8 +13,6 @@ title: "浅谈model, orm, dao和active record的区别"
 * Active Record
 
 这些概念都是和数据相关的，然而他们之间有怎样的区别呢？
-
-<!--more-->
 
 首先来看Model，模型。模型是MVC中的概念，指的是数据和改变数据的操作（业务逻辑）。模型通常指代现实生活中的某样实体。以订单为例，每个订单都包含许多数据，如客户、价格、明细等等，这些数据都叫做订单这个模型的属性，此外，和订单相关的一些列操作，比如当购买时，你可能需要先检查库存，给与一定的优惠，再更新账户余额和积分等等，这些就叫做业务逻辑，也是模型的一部分，从代码上来讲，是要放在模型中的。
 

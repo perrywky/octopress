@@ -4,10 +4,10 @@
 
 url: http://blog.pengqi.me
 title: 彭琪谈编程
-subtitle: 编程、web、学习...
+subtitle: 
 author: 彭琪
 simple_search: http://google.com/search
-description: 关于编程、学习以及web开发相关技术的博客
+description: 关于web和iOS开发的博客
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in

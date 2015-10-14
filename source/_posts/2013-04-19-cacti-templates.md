@@ -4,8 +4,7 @@ title: "整理Cacti模板"
 date: 2013-04-19 16:30
 comments: true
 categories: 
-    - SA
-    - Cacti
+  - SA
 ---
 
 这两天装了些Cacti的模板，整理下留作备忘
@@ -15,8 +14,6 @@ categories:
 - <http://www.percona.com/doc/percona-monitoring-plugins/cacti/mysql-templates.html>
 - 需要创建一个mysql用户，分配SUPER, PROCESS权限
 - 它还提供很多其他服务（nginx, memcached, redis）的模板，但都是通过ssh登录后取的，不适用于我的环境
-
-<!--more-->
 
 ### PHP-FPM
 

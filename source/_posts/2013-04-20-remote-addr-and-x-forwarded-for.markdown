@@ -3,15 +3,14 @@ layout: post
 title: "怎样正确设置remote_addr和x_forwarded_for"
 date: 2013-04-20 17:09
 comments: true
-categories: SA HAProxy Nginx 
+categories: 
+  - SA
 ---
 做网站时经常会用到`remote_addr`和`x_forwarded_for`这两个头信息来获取客户端的IP，然而当有反向代理或者CDN的情况下，这两个值就不够准确了，需要调整一些配置。
 
 ### 什么是remote_addr
 
 remote_addr代表客户端的IP，但它的值不是由客户端提供的，而是服务端根据客户端的ip指定的，当你的浏览器访问某个网站时，假设中间没有任何代理，那么网站的web服务器（Nginx，Apache等）就会把remote_addr设为你的机器IP，如果你用了某个代理，那么你的浏览器会先访问这个代理，然后再由这个代理转发到网站，这样web服务器就会把remote_addr设为这台代理机器的IP。
-
-<!--more-->
 
 ### 什么是x_forwarded_for
 

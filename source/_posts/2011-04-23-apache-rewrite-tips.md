@@ -1,9 +1,9 @@
 --- 
-categories: 
-  - web
-comments: true
 layout: post
 title: Apache的rewrite要点
+categories: 
+  - SA
+comments: true
 ---
 Apache的rewrite模块功能强大，但是想要把它用顺需要注意几点，不然你会很痛苦！
 ###RewriteCond在RewriteRule条件之后判断
@@ -13,8 +13,6 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ http://www.example2.com/$1 [R,L]
 ```
-
-<!--more-->
 
 这里首先用^(.*)$这一正则表达式来匹配所有的url，然后再判断这个url指向的文件是否存在。
 ###DocumentRoot设定后‘/’永远存在

@@ -1,11 +1,9 @@
 --- 
-categories: 
-  - programming language
-  - php
-  - ruby
-comments: true
 layout: post
 title: Ruby与PHP的比较
+categories: 
+  - ruby
+comments: true
 ---
 最近在学Ruby，觉得这门语言有许多优美的特性，相对于PHP来说，代码更简洁，可读性更强，下面做些简单总结。
 ###Ruby里所有的变量都是对象
@@ -15,8 +13,6 @@ title: Ruby与PHP的比较
 1.5.to_s    #"1.5"
 "abc".is_a?(Object)    #true
 ```
-
-<!--more-->
 
 这样设计的一个好处就是，所有类型相关的函数都变成了对象的方法，使得代码更加直观易懂，而不是像PHP那样有成百上千个全局函数，各自的命名规则还不一致：
 ``` ruby ruby
