@@ -1,0 +1,147 @@
+---
+layout: post
+title: "MVC和Component"
+date: 2015-12-07 22:21
+comments: true
+categories: 
+  - iOS
+---
+### 经典MVC
+
+MVC是做客户端开发的工程师非常熟悉的一个设计模式，然而很多人只是把它理解为程序的三个模块（数据、界面、控制器），针对的优化建议也是把这三个模块（尤其是控制器）尽量精简，把不相关的代码（比如网络请求）封装出去。这些建议是没错的，但是忽略了MVC非常重要的另一面——它其实是一个由三个设计模式组成的复合模式，分别用于这三个模块之间的通信。
+
+这里的核心是通信。很多人可能会有类似的体验，当产品越做越大后，扩展会变得越来越慢。当然这里牵扯到的原因很多，但其中很重要的一点就是，当我们修改了某些状态后，要更新的界面越来越多，同页面的跨页面的，一大堆调用。这是一个很典型的问题，早在MVC被发明的时候，它就给出了很好的建议——观察者模式。在[设计模式](http://book.douban.com/subject/1052241/)这本书中，1.2节就介绍了Smalltalk是怎样解决这个问题的：
+
+> MVC通过建立一个“订购/通知”协议来分离视图和模型。视图必须保证它的显示正确地反映了模型的状态。一旦模型的数据发生变化，模型将通知有关的视图，每个视图相应地得到刷新自己的机会。这种方法可以让你为一个模型提供不同的多个视图表现形式，也能够为一个模型创建新的视图而无须重写模型。
+
+很多iOS工程师其实都知道这个模式，但是并没有怎么应用，一是因为模块不够清晰，很多Controller直接画View，因此也直接代劳了View的更新，二是苹果提供的KVO有些坑，用得不好容易导致应用崩溃（比如Observee提前释放，Observer在销毁前必须取消订阅），这里推荐Facebook的[KVCController](https://github.com/facebook/KVOController)，能让KVO安全不少。
+
+MVC中应用的第二个模式是Composite（组合模式），这个模式其实没有啥好讲的，SDK层已经这么做了。你使用的View可能是一个独立的控件，也可能是一个由很多控件组成的复杂界面，但是他们都可以当成一个普通的View来处理。如今应该没有哪个平台的SDK不是这么做的。
+
+MVC中应用的第三个模式是Strategy（策略模式），它解决的是View和Controller之间的通信（响应用户的输入）。我们还是继续看下Smalltalk是怎样描述这个问题的。
+
+> View-Controller关系是Strategy模式的一个例子。一个策略是一个表述算法的对象。当你想静态或动态地替换一个算法，或你有很多不同的算法，或算法中包含你想封装的复杂数据结构，这时策略模式是非常有用的。
+
+View和Controller之间是完全独立的，我们应该尽可能多的使用xib或UIView的子类来画界面，保证其复用性，Controller只负责响应其交互，并根据不同的场景调整策略。比如说头像，它本身是一个View，并可能有显示VIP等级等特性，但是点击头像这一交互，就有跳转到Profile或者查看大图两种策略。
+
+在苹果的[文档](https://developer.apple.com/library/ios/documentation/General/Conceptual/CocoaEncyclopedia/Model-View-Controller/Model-View-Controller.html#//apple_ref/doc/uid/TP40010810-CH14-SW9)中，也提到了这三者之间的关系，如下图所示。
+
+![traditional_mvc](https://developer.apple.com/library/ios/documentation/General/Conceptual/CocoaEncyclopedia/Art/traditional_mvc.gif)
+
+### Cocoa MVC
+
+然而苹果并不推荐以上这种模式，因为View和Model绑定在一起了，他们推荐下图这种方式。
+
+![cocoa_mvc](https://developer.apple.com/library/ios/documentation/General/Conceptual/CocoaEncyclopedia/Art/cocoa_mvc.gif)
+
+这样做的目的是为了斩断View和Model之间的依赖，提高各自的重用性。苹果提供了一个中介（Mediating Controller）将两者联系起来，并提供了一系列的Binding技术来减少胶水代码，这个过程甚至可以直接在Interface Builder中完成。
+
+Cocoa SDK里有两种Controller，除了上面说的Mediating Controller，还有一种是Coordinating Controller，它是页面的骨架，可以包含多个Mediating Controller。一个完整的界面就是由多层次的Controller共同组成，各自负责一小块UI的交互响应。
+
+不过可惜的是，在iOS开发中，苹果并没有提供这种技术，可能是因为手机屏幕很小，不会有太复杂的界面吧。
+
+### Components
+
+Cocoa MVC给了我不少启发，一个界面并不是只能有一个Controller，它可以由多个Component组成，每个Component都拥有一个内部的MVC结构。这样一个Component可以多处复用，代码结构也更加清晰。
+
+苹果从iOS 5就开始支持[自定义Container Controller](https://developer.apple.com/library/ios/featuredarticles/ViewControllerPGforiPhoneOS/ImplementingaContainerViewController.html#//apple_ref/doc/uid/TP40007457-CH11-SW1)，childController可以访问parentController，还可以访问最外层的navigationController、tabBarController等等，这就能让我们的childController控制页面的跳转。
+
+这个技术可以用来做一些高度复用的Component，把部分UI和响应策略全部封装起来，比如上面说的点击头像推到Profile页面，或者点击头像查看大图。这样两个头像Component能覆盖绝大多数场景，可以节省不少代码，而且易于维护，他们的View是重用的，不同的只是Controller。
+
+除此以外，childController还能接收到viewWillAppear、viewWillDisappear等事件，让其做些初始化准备或动画效果。
+
+最新的3D Touch事件也可以加在childController上，使得扩展新的交互方式非常方便，比如头像Component加好后，任何地方的头像都可以支持Peek and Pop。
+
+这样一种层次化的MVC并不是苹果的专利，安卓里一个Activity（最外层的Controller）可以由多个Fragment（childController）组成，Fragment能接受各种UI Event，也能发起Intent，本质上是一样的。
+
+### Child Controller
+
+使用child controller其实很简单，四行代码：
+
+``` objective-c
+    [self addChildViewController:childViewController];
+    childViewController.view.frame = [self frameForChildController];
+    [self.view addSubview:childViewController.view];
+    [childViewController didMoveToParentViewController:self];
+```
+
+第一行会让childViewController收到willMoveToParentViewController:事件。
+
+删除Child Controller也分成三步：
+
+``` objective-c
+    [childViewController willMoveToParentViewController:nil];
+    [childViewController.view removeFromSuperview];
+    [childViewController removeFromParentViewController];
+```
+  
+最后一行会让childViewController收到didMoveToParentViewController:事件。
+
+这么做的目的是让childViewController在被加载和删除前后都能收到通知。
+
+### Cell Component
+
+如果UITableViewCell是一个比较复杂的页面，有多种交互，还不只用于一个TableView，那么可以把它的界面单独抽出来，和Controller组成一个Component，包裹在一个容器Cell中。
+
+``` objective-c
+  - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+  {
+      ContainerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"containerCell"];
+      if (!cell) {
+          cell = [[ContainerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"containerCell"];
+          cell.contentVC = [[UserCellController alloc] init];
+      }
+      cell.contentVC.user = user;
+  }
+  
+  - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+  {
+      [(ContainerCell *cell) addToParentVC:self];
+  }
+  
+  - (void)tableView:(UITableView *)tableView didEndDisplayingCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+  {
+      [(ContainerCell *)cell removeFromParentVC];
+  }
+
+@interface ContainerCell()
+
+  - (void)addToParentVC:self:(UIViewController *)parentVC {
+      [parentVC addChildViewController:self.contentVC];
+      self.contentVC.frame = self.contentView.bounds;
+      [self.contentView addSubview:self.contentVC.view];
+      [self.contentVC didMoveToParentViewController:parentVC];
+  }
+
+  - (void)removeFromParentVC {
+      [self.contentVC willMoveToParentViewController:nil];
+      [self.contentVC.view removeFromSuperview];
+      [self.contentVC removeFromParentViewController];
+  }
+```
+  
+这种方式可以让Cell中的Controller接收到ViewDidAppear等各种UI Event。
+
+### React
+
+[React](https://facebook.github.io/react/)是Facebook开源的一个特别火的JS框架，虽然它声称自己只是MVC中V，但我觉得它其实是一个微型的MVC：
+
+- props、state对应Model，当他们有变化时框架会自动刷新UI
+- Class对应Controller，提供componentDidMount、componentDidUpdate等UI Event，并且响应用户的交互
+- render方法对应View
+
+React的优势在于，它完全是声明式(Declarative)的语言。
+
+- 通过JSX描述UI，并可以嵌套其他自定义Class
+- 自动侦听props和states的变化，当需要更新UI时，会直接调用render方法来重绘，不用你写任何胶水代码
+- 使用Virtual Dom来渲染，提高性能
+
+工程师不用在意UI最后是如何生存的，只关注于描述UI本身。这样做不仅能节省大量代码，提高写UI的效率，而且会让你主动去用Component的思路拆分UI，养成复用的好习惯。
+
+它也能让开发者专注于自己写的Component，Component之间互不干涉，没有副作用。
+
+### ComponentKit & React Native
+
+Facebook的iOS团队借鉴了React的思路，也做了套类似的[ComponentKit](https://github.com/facebook/componentkit)，为了尽可能的模仿React的写法，它用了Objective C++，但是它只适用于Collection View和Table View，可以说是专门为Facebook App里的Feed流而设计的框架吧，用的人并不多。因此，为了更广泛地应用React的思想，Facebook又开发了React Native，支持各种UI控件，写法和React一模一样。
+
+React Native让很多Web开发者得以开发iOS和Android程序，但是对iOS和Android程序员帮助不大，除非他们愿意学习web开发。但是React的思路是完全可以借鉴的。在我看来，它就是对Cocoa MVC框架的再封装。用Component开发组件，用声明式的语言提高开发效率。Objective-C或Swift语言为何不能实现一套类似的框架，瓶颈在于声明式语法这里？
